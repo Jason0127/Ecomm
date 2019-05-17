@@ -7,7 +7,7 @@
             case UPLOAD_ERR_NO_FILE:
                 echo 'No File Sent';
             default:
-                echo '?';
+                echo '???';
         }
 
         if($_FILES['file']['size'] > 1000000){
