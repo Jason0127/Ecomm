@@ -1,0 +1,62 @@
+.avatar .avtr-height{
+    height: calc(4vmin + 12px);
+}
+.navbar .align-icn-cntr{
+    margin-right: calc(2vmin + 10px)
+}
+.navbar .align-item-end{
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: flex-end;
+}
+@media(max-width: 990px){
+    .md-w-90{
+        width: 90% !important;
+    }
+    .md-fd-unset{
+        flex-direction: unset !important;
+    }
+}
+.w-98{
+    width: 98%;
+}
+.txt-clr-bluegrey{
+    color: #263238;
+}
+.modal-title.title-items{
+    position: absolute;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.table .description-td{
+    max-width: calc(10vmin + 150px);
+}
+form .login-size{
+    width: 70vmin;
+}
+@media(max-width: 600px){
+    form .login-size{
+        width: 90vmin;
+    }
+}
+.my-form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+form .my-btn{
+    padding: 2vmin;
+}
+/* form .image-size{
+
+} */
+
+form .image-size img{
+    border-radius: 8px;
+}
+.btn-rounded{
+    border-radius: 50px !important;
+}
