@@ -132,7 +132,7 @@
                         let mergeData = [];
                         mergeData = [...listItem, newData]
                         setListItem(mergeData);
-                        console.log(listItem)
+                        $('#modal-product').modal('hide');
                     })
                 }
 

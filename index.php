@@ -1,7 +1,7 @@
 <?php 
 
     include_once 'include/head.php';
-    include_once 'include/navbar.php';
+    include_once 'include/navbar-login.php';
     define('BASEURL', $_SERVER['DOCUMENT_ROOT'].'/nonpm/')
 
 ?>
