@@ -112,6 +112,7 @@
             })
             .done((data)=>{
                 setLogout(1);
+                location.reload();
                 setTimeout(() => {
                     setLogin(0)
                     setLogout(0)
