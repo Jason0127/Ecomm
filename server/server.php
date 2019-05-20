@@ -8,7 +8,12 @@
     }
 
     if(isset($_GET['getPrductPerUser'])){
-        echo json_encode($obj->getProductPerUser());
+        if(isset($_GET['auth'])){
+            if(!empty($_GET['auth'])){
+                $id = $_GET['auth'];
+                echo json_encode($obj->getProductPerUser($id));
+            }
+        }
     }
 
     if(isset($_POST['AdminLogin'])){

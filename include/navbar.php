@@ -135,7 +135,7 @@
                     </div>
                 </nav>
                 <div>
-                    <img src="https://mdbootstrap.com/img/Photos/Slides/img%20(137).jpg" className="img-fluid"/>
+                    <img src="widgetUI/images/img (137).jpg" className="img-fluid" style={{width: '100%'}}/>
                 </div>
                 {loginModal()}
             </React.Fragment>

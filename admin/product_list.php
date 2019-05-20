@@ -20,10 +20,16 @@
                 let [auth, setAuth] = React.useState('');
                 let [desc, setDesc] = React.useState('');
 
+                // console.log(listItem)
+
+                
                 React.useEffect(()=>{
-                    getProductItem();
                     getCookie();
                 }, [])
+
+                React.useEffect(()=>{
+                    getProductItem();
+                }, [auth])
 
                 const getCookie = ()=>{
                     $.ajax({
@@ -34,19 +40,26 @@
                     .done((data)=>{                        
                         if(data){
                             setAuth(data)
+                            // console.log('dataAuth')
+                        }
+                        if(!data){
+                            window.location.href= '/nonpm/admin/login.php';
                         }
                     })
                 }
 
                 const getProductItem = ()=>{
+                    // console.log(auth)
                     $.ajax({
-                        url: `../server/server.php`,
+                        url: '/nonpm/server/server.php',
                         method: 'GET',
-                        data: 'getPrductPerUser=1'
+                        data: {auth, 'getPrductPerUser': 1}
                     })
                     .done((data)=>{
                         // alert(data)
-                        setListItem(JSON.parse(data))
+                        if(data){
+                            setListItem(JSON.parse(data))
+                        }
                     })
                 }
 
@@ -68,7 +81,7 @@
                         listItem.map((item)=>{
                             x += 1
                             return(
-                                <tr key={item.id}>
+                                <tr key={x}>
                                     {productItems(item, x)}
                                 </tr>
                             )
@@ -110,9 +123,17 @@
                         data: {data, 'add_prod': 1}
                     })
                     .done((res)=>{
-                        console.log(res)
+                        let newData = {
+                            'product_name': productName,
+                            'price': priceval,
+                            'stocks': stocksval,
+                            'descr': desc,
+                        }
+                        let mergeData = [];
+                        mergeData = [...listItem, newData]
+                        setListItem(mergeData);
+                        console.log(listItem)
                     })
-                    // console.log(productName, priceval, stocksval, desc, imagesrc)
                 }
 
                 const handleTextArea = (e)=>{
@@ -120,7 +141,6 @@
                 }
 
                 const modalAddProduct = ()=>{
-                    console.log(auth)
                     return(
                         <div className="modal fade" id="modal-product" role="dialog" aria-labelledby="modallabel" aria-hidden="true">
                             <div className="modal-dialog modal-lg" role="document">
@@ -189,6 +209,7 @@
                 const openModal = ()=>{
                     $('#modal-product').modal('toggle')
                 }
+
 
                 return(
                     <React.Fragment>

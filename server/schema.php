@@ -22,11 +22,11 @@
             return $result;
         }
 
-        function getProductPerUser(){
-            $stmt = $this->db->prepare("SELECT product_tbl.id, 
-            product_tbl.product_name, product_tbl.descr, product_tbl.price, product_tbl.stocks 
-            FROM product_tbl right join admin_users on  product_tbl.owner_id = admin_users.id");
-            $stmt->execute();
+        function getProductPerUser($id){
+            $stmt = $this->db->prepare("SELECT product_name, descr, price, stocks FROM product_tbl where owner_id = :id");
+            $stmt->execute(array(
+                ':id' => $id
+            ));
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $result;
         }

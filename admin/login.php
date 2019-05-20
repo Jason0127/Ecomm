@@ -30,7 +30,7 @@
                 })
                 .done((data)=>{
                     if(data){
-                        // window.location.href = 'product_list.php'
+                        window.location.href = 'product_list.php'
                     }
                 })
             }
@@ -51,7 +51,7 @@
                     }
                 })
                 .done((data)=>{
-                    alert(data);
+                    // alert(data);
                     if(data === '0'){
                         return console.log('empty')
                     }else if(data === 'invalid'){

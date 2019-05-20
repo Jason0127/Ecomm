@@ -49,9 +49,37 @@
                 setQty(e.target.value)
             }
 
-            const modalTemplate = (props)=>{
+            const modalBodyTemplate = (props)=>{
                 let qty = (typeof inputQty === 'undefined') ? setQty(parseInt(0)) : inputQty
                 let stocks = parseInt(props.stocks) - qty
+                return props ? 
+                    <div className="row">
+                        <div className="col-lg-7">
+                            <img src={`images/${props.img}`} className="img-fluid"/>
+                        </div>
+                        <div className="col-lg-5">
+                            <div className="card mb-5">
+                                <div className="card-body">
+                                    <h5 className="card-title">Description</h5>
+                                    <p className="card-text">
+                                        {props.descr}
+                                    </p>
+                                </div>
+                            </div>        
+                            <div className="md-form form-md">
+                                <input type="number" min="0" id="qty" className="form-control" onChange={(e)=>handleInputqty(e)}/>
+                                <label htmlFor="qty">Quantity</label>
+                            </div>
+                            <div className="md-form from-md">
+                                <p>Storage: {stocks}</p>
+                            </div>
+                        </div>
+                    </div>
+                : null
+            }
+
+            const modalTemplate = (props)=>{
+                console.log(props)
                 return(
                     <div className="modal fade" id="Modal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div className="modal-dialog modal-lg" role="document">
@@ -63,28 +91,7 @@
                                     </button>
                                 </div>
                                 <div className="modal-body">
-                                    <div className="row">
-                                        <div className="col-lg-7">
-                                            <img src={`images/${props.img}`} className="img-fluid"/>
-                                        </div>
-                                        <div className="col-lg-5">
-                                            <div className="card mb-5">
-                                                <div className="card-body">
-                                                    <h5 className="card-title">Description</h5>
-                                                    <p className="card-text">
-                                                        {props.descr}
-                                                    </p>
-                                                </div>
-                                            </div>        
-                                            <div className="md-form form-md">
-                                                <input type="number" min="0" id="qty" className="form-control" onChange={(e)=>handleInputqty(e)}/>
-                                                <label htmlFor="qty">Quantity</label>
-                                            </div>
-                                            <div className="md-form from-md">
-                                                <p>Storage: {stocks}</p>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    {modalBodyTemplate(props)}
                                 </div>
                                 <div className="modal-footer">
                                     <button type="button" className="btn btn-secondary" data-dismiss="modal">Cancel</button>
@@ -98,7 +105,6 @@
 
 
             const openModal = (props)=>{
-                console.log(props)
                 setItemDetails(props)
                 $('#Modal').modal('toggle')
             }
@@ -106,7 +112,7 @@
             const itemsTemplate = (props)=>{
                 return(
                     <React.Fragment>
-                        <div className="view overlay">
+                        <div className="view overlay w-100">
                             <img src={`images/${props.img}`} style={{borderRadius: '5px'}} className="img-fluid" alt="img"/>
                             <a onClick={()=>openModal(props)}>
                                 <div className="mask waves-effect waves-light rgba-white-slight"></div>
@@ -121,7 +127,7 @@
             }
 
             const loadItems = ()=>{
-                return itemsState ? 
+                return itemsState ?
                     itemsState.map((item)=>{
                         return(
                             <div className="col-6 col-md-4 col-lg-3 mb-3" key={item.id}>
@@ -131,7 +137,7 @@
                     })
                 : <div>Empty</div>
             }
-            console.log(itemsState)
+
             return(
                 <React.Fragment>
                     <h3 className="text-center mb-5 font-weight-light">Feature Product</h3>
