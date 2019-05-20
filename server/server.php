@@ -62,6 +62,27 @@
             'pword' => $pword
         );
 
-        print_r($obj->logInUser($data));
+        if(empty($email) && empty($pword)){
+            echo false;
+        }else{
+            $result = $obj->logInUser($data);
+            if($result == '' || empty($result) || !$result){
+                echo 'invalid';
+            }else{
+                setcookie('userAuth', $result['id'], time() + 3600, '/');
+                echo json_encode($result);
+            }
+        }
+        
+    }
+
+    if(isset($_GET['isAuth'])){
+        $id = (isset($_GET['id'])) ? $_GET['id'] : '';
+        if(empty($id) || $id == ''){
+            echo false;
+        }else{
+            $result = $obj->auth($id);
+            echo json_encode($result);
+        }
     }
 ?>

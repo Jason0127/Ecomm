@@ -6,8 +6,13 @@
 
         let [alignAvatar, setAvatar] = React.useState(false)
         let [login, setLogin] = React.useState(0);
+        let [userLog, setUserLog] = React.useState([]);
         let [email, setEmail] = React.useState('');
         let [pword, setPword] = React.useState('');
+
+        React.useEffect((data)=>{
+            checkCookie();
+        }, [])
 
         const handleLoginSubmit = (e)=>{
             e.preventDefault()
@@ -21,9 +26,47 @@
                 data: {data, 'login': 1}
             })
             .done((data)=>{
-                console.log(data);
+               if(!data){
+                    console.log('false');
+               }else if(data === 'invalid'){
+                    console.log('invalid username and password');
+               }else{
+                    setUserLog(JSON.parse(data));
+                    setLogin(1);
+                    $('#login-modal').modal('hide')
+               }
             })
         }
+
+        const cookieAuth = (id)=>{
+            console.log(id)
+            $.ajax({
+                url: '/nonpm/server/server.php',
+                method: 'GET',
+                data: {id, isAuth: 1}
+            })
+            .done((data)=>{
+                setUserLog(JSON.parse(data));
+            })
+        }
+
+        const checkCookie = ()=>{
+            $.ajax({
+                url: '/nonpm/application/storage.php',
+                method: 'GET',
+                data: 'getUserCookie=1'
+            })
+            .done((data)=>{
+                if(!data){
+                    setLogin(0);
+                }else{
+                    setLogin(1)
+                    cookieAuth(data)
+                }
+            })
+        } 
+        
+        console.log(userLog);
 
         const loginModal = ()=>{
             return(
@@ -81,9 +124,7 @@
                             </a>
                             <div className="dropdown-menu dropdown-menu-right dropdown-secondary"
                                 aria-labelledby="navbarDropdownMenuLink-55">
-                                <a className="dropdown-item" href="#">Action</a>
-                                <a className="dropdown-item" href="#">Another action</a>
-                                <a className="dropdown-item" href="#">Something else here</a>
+                                <a className="dropdown-item" href="#">Email: {userLog ? userLog.email : null}</a>
                             </div>
                         </li>
                     </ul>

@@ -72,6 +72,15 @@
             $result = $stmt->fetch(PDO::FETCH_ASSOC);
             return $result;
         }
+
+        function auth($id){
+            $stmt = $this->db->prepare("SELECT * FROM cosumer_tbl where id = :id");
+            $stmt->execute(array(
+                ':id' => $id
+            ));
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $result;
+        }
     }
 
 ?>

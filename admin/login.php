@@ -24,9 +24,9 @@
         
             const getCookie = ()=>{
                 $.ajax({
-                    url: 'application/storage.php',
+                    url: '/nonpm/application/storage.php',
                     method: 'GET',
-                    data: 'getCookie=1'
+                    data: 'getAdminCookie=1'
                 })
                 .done((data)=>{
                     if(data){
