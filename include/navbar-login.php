@@ -9,6 +9,7 @@
         let [userLog, setUserLog] = React.useState([]);
         let [email, setEmail] = React.useState('');
         let [pword, setPword] = React.useState('');
+        let [logout, setLogout] = React.useState(0);
 
         React.useEffect((data)=>{
             checkCookie();
@@ -103,6 +104,21 @@
             )
         }
 
+        const logoutUser = (e)=>{
+            $.ajax({
+                url: '/nonpm/server/server.php',
+                method: 'POST',
+                data: {id: userLog.id, logoutUser: '1'}
+            })
+            .done((data)=>{
+                setLogout(1);
+                setTimeout(() => {
+                    setLogin(0)
+                    setLogout(0)
+                }, 3000);
+            })
+        }
+
         const openModalLogin = ()=>{
             $('#login-modal').modal('toggle')
         }
@@ -124,13 +140,20 @@
                             </a>
                             <div className="dropdown-menu dropdown-menu-right dropdown-secondary"
                                 aria-labelledby="navbarDropdownMenuLink-55">
-                                <a className="dropdown-item" href="#">Email: {userLog ? userLog.email : null}</a>
+                                <a className="dropdown-item">Email: {userLog ? userLog.email : null}</a>
+                                <a className="dropdown-item" onClick={(e)=>logoutUser(e)}>Logout</a>
                             </div>
                         </li>
                     </ul>
                 </React.Fragment>
                 :
                 <button className="btn btn-outline-default waves-effect" onClick={(e)=>openModalLogin(e)}>Sign In</button>
+        }
+
+        if(logout){
+            return(
+                <div>Logging Out...</div>
+            )
         }
 
         return(
@@ -167,9 +190,9 @@
                                 aria-haspopup="true" aria-expanded="false">Dropdown
                                 </a>
                                 <div className="dropdown-menu dropdown-secondary" aria-labelledby="navbarDropdownMenuLink-555">
-                                <a className="dropdown-item" href="#">Action</a>
-                                <a className="dropdown-item" href="#">Another action</a>
-                                <a className="dropdown-item" href="#">Something else here</a>
+                                    <a className="dropdown-item" href="#">Action</a>
+                                    <a className="dropdown-item" href="#">Another action</a>
+                                    <a className="dropdown-item" href="#">Something else here</a>
                                 </div>
                             </li>
                         </ul>

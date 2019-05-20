@@ -85,4 +85,14 @@
             echo json_encode($result);
         }
     }
+
+    if(isset($_POST['logoutUser'])){
+        $id = (isset($_POST['id'])) ? $_POST['id'] : '';
+
+        if(empty($id) || $id == ''){
+            echo 'failed to logout';
+        }else{
+            setcookie('userAuth', $id, time() - 900000, '/');
+        }
+    }
 ?>
