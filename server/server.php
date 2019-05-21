@@ -95,4 +95,22 @@
             setcookie('userAuth', $id, time() - 900000, '/');
         }
     }
+
+    if(isset($_POST['addtocart'])){
+        $item = (isset($_POST['item'])) ? $_POST['item'] : '';
+        $item_json = json_encode($item);
+        $id = (isset($_POST['id'])) ? $_POST['id'] : '';
+        $result = $obj->addToCart($item_json, $id);
+        print_r($result);
+    }
+
+    if(isset($_GET['getCart'])){
+        $id = (isset($_GET['id'])) ? $_GET['id'] : '';
+        if(empty($id) || $id == '' || !$id){
+            echo false;
+        }else{
+            $result = $obj->getUserCart($id);
+            echo $result['cart_tbl'];
+        }
+    }
 ?>

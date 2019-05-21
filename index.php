@@ -15,42 +15,76 @@
             let [itemDetails, setItemDetails] = React.useState('');
             let [inputQty, setQty] = React.useState();
             let [sample, setSample] = React.useState();
+            let [cart, setCart] = React.useState([]);
+            let [cokie, setCokie] = React.useState(0);
+
+            React.useEffect(()=>{
+                getProduct();
+                checkCokie();
+            }, [])
+
+            React.useEffect(()=>{
+                countCart();
+            })
+
+            const countCart =()=>{
+                let count = cart.length;
+                localStorage.setItem("count", count)
+            }
 
             const getProduct = ()=>{
                 let skip = itemsState.length;
                 $.ajax({
-                    url: `server/server.php?limit=${4}&skip=${skip}`,
+                    url: `server/server.php?limit=${10}&skip=${skip}`,
                     method: 'GET',
                     data: 'getProduct=1'
                 })
                 .done((data)=>{
                     let dataItem = JSON.parse(data);
                     if(itemsState){
-                        let mergedArray = itemsState.concat(dataItem)
-                        setItems(mergedArray)
+                        let mergedArray = itemsState.concat(dataItem);
+                        setItems(mergedArray);
                     }else{
-                        setItems(dataItem)
+                        setItems(dataItem);
+                        console.log('else');
                     }
                     
                 })
             }
 
-            // const isLogin = ()=>{
-            //     if(login){
-
-            //     }
-            // }
+            const checkCokie = ()=>{
+                $.ajax({
+                    url: '/nonpm/application/storage.php',
+                    method: 'GET',
+                    data: 'getUserCookie=1'
+                })
+                .done((data)=>{
+                    setCokie(data);
+                })
+            }
 
             React.useEffect(()=>{
-                getProduct();
-            }, [])
+                getCart();
+            }, [cokie])
+
+            const getCart = ()=>{
+               $.ajax({
+                   url: '/nonpm/server/server.php',
+                   method: 'GET',
+                   data: {id: cokie, 'getCart': 1}
+               })
+               .done((data)=>{
+                   !data ? setCart([]) : setCart(JSON.parse(data));
+               })
+            }
+
 
             const handleInputqty = (e)=>{
                 setQty(e.target.value)
             }
 
             const modalBodyTemplate = (props)=>{
-                let qty = (typeof inputQty === 'undefined') ? setQty(parseInt(0)) : inputQty
+                let qty = (typeof inputQty === 'undefined') ? '' : inputQty
                 let stocks = parseInt(props.stocks) - qty
                 return props ? 
                     <div className="row">
@@ -67,7 +101,7 @@
                                 </div>
                             </div>        
                             <div className="md-form form-md">
-                                <input type="number" min="0" id="qty" className="form-control" onChange={(e)=>handleInputqty(e)}/>
+                                <input type="number" min="0" id="qty" className="form-control" onChange={(e)=>handleInputqty(e)} value={inputQty}/>
                                 <label htmlFor="qty">Quantity</label>
                             </div>
                             <div className="md-form from-md">
@@ -76,6 +110,33 @@
                         </div>
                     </div>
                 : null
+            }
+
+            const addToCart = (props)=>{
+                let item = {
+                    id: props.id,
+                    owner_id: props.owner_id,
+                    product_name: props.product_name,
+                    qty: inputQty,
+                    price: props.price,
+                    img: props.img,
+                    descr: props.descr
+                }
+                cart.map((cartItem, x)=>{
+                    if(cartItem.id === item.id){
+                        item.qty = parseInt(item.qty) + parseInt(cartItem.qty)
+                        cart.splice(x, 1)
+                    }
+                })
+                cart.push(item)
+                $.ajax({
+                    url: '/nonpm/server/server.php',
+                    method: 'POST',
+                    data: {id: cokie,item: cart, 'addtocart': 1}
+                })
+                .done((data)=>{
+                    console.log(cart);
+                })
             }
 
             const modalTemplate = (props)=>{
@@ -95,7 +156,7 @@
                                 </div>
                                 <div className="modal-footer">
                                     <button type="button" className="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                    <button type="button" className="btn btn-primary"><i className="fas fa-cart-plus"></i> Add to Cart</button>
+                                    <button type="button" className="btn btn-primary" onClick={()=>addToCart(props)}><i className="fas fa-cart-plus"></i> Add to Cart</button>
                                 </div>
                             </div>
                         </div>

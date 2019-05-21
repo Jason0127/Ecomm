@@ -81,6 +81,24 @@
             $result = $stmt->fetch(PDO::FETCH_ASSOC);
             return $result;
         }
+
+        function getUserCart($id){
+            $stmt = $this->db->prepare("SELECT cart_tbl FROM cosumer_tbl where id = :id");
+            $stmt->execute(array(
+                ':id' => $id
+            ));
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $result;
+        }
+
+        function addToCart($item, $id){
+            $stmt = $this->db->prepare("UPDATE cosumer_tbl set cart_tbl = :item where id = :id");
+            $result = $stmt->execute(array(
+                ':id' => $id,
+                ':item' => $item
+            ));
+            return $result;
+        }
     }
 
 ?>
